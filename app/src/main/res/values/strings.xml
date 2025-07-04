@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">StoryApp</string>
+    <string name="content_description_welcome_img">story app welcome picture</string>
+    <string name="title_welcome_page">Welcome to StoryApp!</string>
+    <string name="welcome_title_page">Write, Read and Share Your Stories. On StoryApp, your every story finds a place to shine. Start your adventure now and be part of a community that celebrates imagination!</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="login_here">Login Here</string>
+    <string name="title_login_welcome">We\'re glad you\'re back! Find the best experience only here!</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="email_error">Enter a valid Email</string>
+    <string name="password_error">Password cannot be less than 8 characters</string>
+    <string name="appwidget_text">Widget cerita</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="button_language_localization">Button to change language</string>
+    <string name="list_story">List Story</string>
+    <string name="detail_story">Story Details</string>
+    <string name="add_story">Add Story</string>
+    <string name="add_story_img_cd">Picture the story you chose</string>
+    <string name="camera">Camera</string>
+    <string name="galery">Galery</string>
+    <string name="add_story_desc">Add Description....</string>
+    <string name="upload">Upload</string>
+    <string name="language">Language</string>
+    <string name="log_out">Log out</string>
+    <string name="create_account">Create Account</string>
+    <string name="signup_welcome_text">Join Our Story Community! Register on StoryApp Now.</string>
+    <string name="img_story_detail_desc">Detailed story photo</string>
+    <string name="add">Add</string>
 </resources>
