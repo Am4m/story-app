@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="content_description_welcome_img">gambar selamat datang story app</string>
+    <string name="title_welcome_page">Selamat Datang di StoryApp!</string>
+    <string name="welcome_title_page">Tulis, Baca, dan Bagikan Ceritamu. Di StoryApp, setiap kisahmu menemukan tempat untuk bersinar. Mulai petualanganmu sekarang dan jadilah bagian dari komunitas yang merayakan imajinasi!</string>
+    <string name="login">Masuk</string>
+    <string name="signup">Daftar</string>
+    <string name="login_here">Login Disini</string>
+    <string name="title_login_welcome">Kami senang Anda kembali! Temukan pengalaman terbaik hanya di sini!</string>
+    <string name="name">Nama</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Snadi</string>
+    <string name="email_error">Masukkan email yang valid</string>
+    <string name="password_error">Password tidak boleh kurang dari 8 karakter</string>
+    <string name="appwidget_text">widget cerita</string>
+    <string name="add_widget">Tambah Widget</string>
+    <string name="app_widget_description">Ini adalah deskripsi widget aplikasi</string>
+    <string name="button_language_localization">Tombol untuk mengganti bahasa</string>
+    <string name="list_story">Daftar Cerita</string>
+    <string name="detail_story">Detail Cerita</string>
+    <string name="add_story">Tambah Cerita</string>
+    <string name="add_story_img_cd">Gambar cerita yang kamu pilih</string>
+    <string name="camera">Kamera</string>
+    <string name="galery">Galeri</string>
+    <string name="add_story_desc">Tambahkan Deskripsi....</string>
+    <string name="upload">Unggah</string>
+    <string name="language">Bahasa</string>
+    <string name="log_out">Keluar</string>
+    <string name="create_account">Buat Akun</string>
+    <string name="signup_welcome_text">Bergabunglah dengan Komunitas Cerita Kami! Daftar di StoryApp Sekarang.</string>
+    <string name="img_story_detail_desc">Foto cerita detail</string>
+    <string name="add">Tambah</string>
+</resources>

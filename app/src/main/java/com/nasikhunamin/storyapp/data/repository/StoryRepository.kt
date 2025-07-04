@@ -55,6 +55,30 @@ class StoryRepository private constructor(
         }
     }
 
+    fun uploadImage(imageFile: File, description: String) = liveData {
+        emit(Result.Loading)
+        val token = userPreference.getSession().first().token
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val successResponse = apiService.uploadImage(
+                "Bearer $token",
+                multipartBody,
+                requestBody
+            )
+            emit(Result.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+            emit(Result.Error(errorResponse.message.toString()))
+        }
+    }
+
     companion object {
         fun getInstance(apiService: ApiService, userPreference: UserPreference): StoryRepository {
             return StoryRepository(apiService, userPreference)
