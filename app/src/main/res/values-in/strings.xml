@@ -31,4 +31,10 @@
     <string name="signup_welcome_text">Bergabunglah dengan Komunitas Cerita Kami! Daftar di StoryApp Sekarang.</string>
     <string name="img_story_detail_desc">Foto cerita detail</string>
     <string name="add">Tambah</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="maps">Maps</string>
+    <string name="title_activity_maps_picked_location">MapsPickedLocationActivity</string>
+    <string name="message_pcked">Silakan tandai lokasi di peta terlebih dahulu</string>
+    <string name="add_location_selected">Lokasi di pilih</string>
+    <string name="add_location">Tambah Lokasi</string>
 </resources>

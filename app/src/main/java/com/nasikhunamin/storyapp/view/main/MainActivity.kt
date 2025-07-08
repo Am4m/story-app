@@ -22,6 +22,7 @@ import com.nasikhunamin.storyapp.databinding.ActivityMainBinding
 import com.nasikhunamin.storyapp.view.welcome.WelcomeActivity
 import com.nasikhunamin.storyapp.data.repository.Result
 import com.nasikhunamin.storyapp.view.addstory.AddStoryActivity
+import com.nasikhunamin.storyapp.view.maps.MapsActivity
 import com.nasikhunamin.storyapp.widget.StoryAppWidget
 
 class MainActivity : AppCompatActivity() {
@@ -63,6 +64,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
+            R.id.maps -> {
+                startActivity(Intent(this, MapsActivity::class.java))
+                true
+            }
             R.id.localization -> {
                 startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
                 true

@@ -38,6 +38,23 @@ class StoryRepository private constructor(
         }
     }
 
+    fun getStoryWithMaps(): LiveData<Result<List<ListStoryItem>>> = liveData {
+        emit(Result.Loading)
+
+        try {
+            val token = userPreference.getSession().first().token
+            val response = apiService.getStories("Bearer $token", location = 1)
+            val result = response.listStory
+
+            emit(Result.Success(result))
+        }catch (e: HttpException) {
+            val errorMessage = e.response()?.errorBody()?.string() ?: e.message()
+            emit(Result.Error(errorMessage))
+        } catch (e: IOException) {
+            emit(Result.Error("Network error: ${e.message}"))
+        }
+    }
+
     fun getStoryById(storyId: String): LiveData<Result<ListStoryItem>> = liveData {
         emit(Result.Loading)
         try {
@@ -55,7 +72,7 @@ class StoryRepository private constructor(
         }
     }
 
-    fun uploadImage(imageFile: File, description: String) = liveData {
+    fun uploadImage(imageFile: File, description: String, lat: Double? = null, lon: Double? = null) = liveData {
         emit(Result.Loading)
         val token = userPreference.getSession().first().token
         val requestBody = description.toRequestBody("text/plain".toMediaType())
@@ -69,7 +86,9 @@ class StoryRepository private constructor(
             val successResponse = apiService.uploadImage(
                 "Bearer $token",
                 multipartBody,
-                requestBody
+                requestBody,
+                lat,
+                lon
             )
             emit(Result.Success(successResponse))
         } catch (e: HttpException) {

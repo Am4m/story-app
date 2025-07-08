@@ -11,6 +11,7 @@ import com.nasikhunamin.storyapp.view.addstory.AddStoryViewModel
 import com.nasikhunamin.storyapp.view.detail.DetailViewModel
 import com.nasikhunamin.storyapp.view.login.LoginViewModel
 import com.nasikhunamin.storyapp.view.main.MainViewModel
+import com.nasikhunamin.storyapp.view.maps.MapsViewModel
 import com.nasikhunamin.storyapp.view.signup.SignUpViewModel
 
 @Suppress("CAST_NEVER_SUCCEEDS")
@@ -27,6 +28,9 @@ class ViewModelFactory(
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(storyRepository) as T
+            }
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(storyRepository) as T
             }
             modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
                 AddStoryViewModel(storyRepository) as T

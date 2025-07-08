@@ -10,6 +10,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.maps.model.LatLng
 import com.nasikhunamin.storyapp.R
 import com.nasikhunamin.storyapp.ViewModelFactory
 import com.nasikhunamin.storyapp.data.repository.Result
@@ -18,12 +19,33 @@ import com.nasikhunamin.storyapp.databinding.ActivityAddStoryBinding
 import com.nasikhunamin.storyapp.utils.getImageUri
 import com.nasikhunamin.storyapp.utils.reduceFileImage
 import com.nasikhunamin.storyapp.utils.uriToFile
+import com.nasikhunamin.storyapp.view.addstory.maps.MapsPickedLocationActivity
 import com.nasikhunamin.storyapp.view.main.MainActivity
+import java.util.Locale
 
 class AddStoryActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStoryBinding
     private var currentImageUri: Uri? = null
+    private var selectedLatLng: LatLng? = null
+
+    private val locationPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+            val latitude = data?.getDoubleExtra(EXTRA_LATITUDE, 0.0)
+            val longitude = data?.getDoubleExtra(EXTRA_LONGITUDE, 0.0)
+
+            if (latitude != null && longitude != null) {
+                selectedLatLng = LatLng(latitude, longitude)
+                val locationText = String.format(Locale.US, "Lat: %.4f, Lon: %.4f", latitude, longitude)
+                binding.tvLatitudeValue.text = locationText
+                binding.tvLatitudeValue.visibility = View.VISIBLE
+            }
+        }
+    }
+
 
     private val viewModel by viewModels<AddStoryViewModel> {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService())
@@ -32,11 +54,13 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = getString(R.string.add_story)
+
 
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.cameraButton.setOnClickListener { startCamera() }
         binding.uploadButton.setOnClickListener { uploadImage() }
+        setupCheckboxListener()
+        setupLocationButton()
     }
 
     private fun startGallery() {
@@ -75,14 +99,37 @@ class AddStoryActivity : AppCompatActivity() {
             binding.previewImageView.setImageURI(it)
         }
     }
+    private fun setupCheckboxListener() {
+        binding.locationCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                binding.locationButton.visibility = View.VISIBLE
+                if (selectedLatLng != null) {
+                    binding.tvLatitudeValue.visibility = View.VISIBLE
+                }
+            } else {
+                binding.locationButton.visibility = View.GONE
+                binding.tvLatitudeValue.visibility = View.GONE
+                selectedLatLng = null
+            }
+        }
+    }
+
+    private fun setupLocationButton() {
+        binding.locationButton.setOnClickListener {
+            val intent = Intent(this, MapsPickedLocationActivity::class.java)
+            locationPickerLauncher.launch(intent)
+        }
+    }
 
     private fun uploadImage() {
         currentImageUri?.let { uri ->
             val imageFile = uriToFile(uri, this).reduceFileImage()
             Log.d(IMAGE_FILE, "$SHOW_IMAGE ${imageFile.path}")
-            val description = binding.editTextTextMultiLine2.text.toString().trim()
+            val description = binding.edAddDescription.text.toString().trim()
+            val lat = selectedLatLng?.latitude
+            val lon = selectedLatLng?.longitude
 
-            viewModel.uploadImage(imageFile, description).observe(this) { result ->
+            viewModel.uploadImage(imageFile, description, lat, lon).observe(this) { result ->
                 if (result != null) {
                     when (result) {
                         is Result.Loading -> {
@@ -120,5 +167,7 @@ class AddStoryActivity : AppCompatActivity() {
         const val IMAGE_URI = "Image URI"
         const val SHOW_IMAGE = "showImage:"
         const val IMAGE_FILE = "Image File"
+        const val EXTRA_LATITUDE = "extra_latitude"
+        const val EXTRA_LONGITUDE = "extra_longitude"
     }
 }

@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:menuCategory="container">
         <item
+            android:id="@+id/maps"
+            android:icon="@drawable/outline_location_on_24"
+            android:title="@string/maps"
+            app:showAsAction="ifRoom" />
+        <item
             android:id="@+id/localization"
             android:icon="@drawable/ic_language_24"
             android:title="@string/language"
