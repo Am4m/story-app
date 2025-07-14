@@ -22,7 +22,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyAJNt0-gIRdS9qmy9qMOginmVcka98OxsU" />
 
         <activity
             android:name=".view.addstory.maps.MapsPickedLocationActivity"

@@ -1,6 +1,7 @@
 package com.nasikhunamin.storyapp.di
 
 import android.content.Context
+import com.nasikhunamin.storyapp.data.database.StoryDatabase
 import com.nasikhunamin.storyapp.data.repository.UserRepository
 import com.nasikhunamin.storyapp.data.pref.UserPreference
 import com.nasikhunamin.storyapp.data.pref.dataStore
@@ -17,6 +18,7 @@ object Injection {
     fun provideStoryRepository(context: Context): StoryRepository {
         val pref = UserPreference.getInstance(context.dataStore)
         val apiService = ApiConfig.getApiService()
-        return StoryRepository.getInstance(apiService, pref)
+        val storyDatabase = StoryDatabase.getDatabase(context)
+        return StoryRepository.getInstance(apiService, pref, storyDatabase)
     }
 }

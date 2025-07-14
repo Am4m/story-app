@@ -9,7 +9,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
@@ -20,7 +19,6 @@ import com.nasikhunamin.storyapp.ViewModelFactory
 import com.nasikhunamin.storyapp.data.retrofit.ApiConfig
 import com.nasikhunamin.storyapp.databinding.ActivityMainBinding
 import com.nasikhunamin.storyapp.view.welcome.WelcomeActivity
-import com.nasikhunamin.storyapp.data.repository.Result
 import com.nasikhunamin.storyapp.view.addstory.AddStoryActivity
 import com.nasikhunamin.storyapp.view.maps.MapsActivity
 import com.nasikhunamin.storyapp.widget.StoryAppWidget
@@ -52,9 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         mainAdapter = MainAdapter()
         setUpRecyclerView()
-        setupObservers()
         setupView()
-        viewModel.getStories()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -107,37 +103,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpRecyclerView() {
-
-       binding.recyclerView.apply {
-           layoutManager = LinearLayoutManager(this@MainActivity)
-           setHasFixedSize(true)
-           adapter = mainAdapter
-       }
-    }
-
-    private fun setupObservers() {
-            viewModel.getStories().observe(this) { result ->
-                when (result) {
-                    is Result.Loading -> {
-                        showLoading(true)
-                        binding.recyclerView.visibility = View.GONE
-                    }
-                    is Result.Success -> {
-                        showLoading(false)
-                        binding.recyclerView.visibility = View.VISIBLE
-                        mainAdapter.submitList(result.data.listStory)
-                    }
-                    is Result.Error -> {
-                        showLoading(false)
-                        binding.recyclerView.visibility = View.GONE
-                    }
-                }
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.adapter = mainAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                mainAdapter.retry()
             }
+        )
 
-    }
-
-    private fun showLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        viewModel.story.observe(this) { pagingData ->
+            mainAdapter.submitData(lifecycle, pagingData)
+        }
     }
 
     companion object{

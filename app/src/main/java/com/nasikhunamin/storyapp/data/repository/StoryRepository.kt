@@ -3,11 +3,18 @@ package com.nasikhunamin.storyapp.data.repository
 import androidx.datastore.core.IOException
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
 import com.google.gson.Gson
+import com.nasikhunamin.storyapp.data.database.StoryDatabase
+import com.nasikhunamin.storyapp.data.entity.StoryEntity
+import com.nasikhunamin.storyapp.data.paging.StoryRemoteMediator
 import com.nasikhunamin.storyapp.data.pref.UserPreference
 import com.nasikhunamin.storyapp.data.response.ErrorResponse
 import com.nasikhunamin.storyapp.data.response.ListStoryItem
-import com.nasikhunamin.storyapp.data.response.StoryAllResponse
 import com.nasikhunamin.storyapp.data.retrofit.ApiService
 import kotlinx.coroutines.flow.first
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,22 +27,20 @@ import java.io.File
 class StoryRepository private constructor(
     private val apiService: ApiService,
     private val userPreference: UserPreference,
+    private val storyDatabase: StoryDatabase
 ) {
-    fun getStories(): LiveData<Result<StoryAllResponse>> = liveData {
-        emit(Result.Loading)
-        try {
-            val token = userPreference.getSession().first().token
-            val response = apiService.getStories("Bearer $token")
-            print(response)
-            emit(Result.Success(response))
-        } catch (e: HttpException) {
-            val errorMessage = e.response()?.errorBody()?.string() ?: e.message()
-            emit(Result.Error(errorMessage))
-        } catch (e: IOException) {
-            emit(Result.Error("Network error: ${e.message}"))
-        } catch (e: Exception) {
-            emit(Result.Error("Unexpected error: ${e.message}"))
-        }
+
+    fun getAllStory(): LiveData<PagingData<StoryEntity>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            remoteMediator = StoryRemoteMediator(storyDatabase, apiService, userPreference),
+            pagingSourceFactory = {
+                storyDatabase.storyDao().getAllStory()
+            }
+        ).liveData
     }
 
     fun getStoryWithMaps(): LiveData<Result<List<ListStoryItem>>> = liveData {
@@ -99,8 +104,8 @@ class StoryRepository private constructor(
     }
 
     companion object {
-        fun getInstance(apiService: ApiService, userPreference: UserPreference): StoryRepository {
-            return StoryRepository(apiService, userPreference)
+        fun getInstance(apiService: ApiService, userPreference: UserPreference, storyDatabase: StoryDatabase): StoryRepository {
+            return StoryRepository(apiService, userPreference, storyDatabase)
         }
     }
 }

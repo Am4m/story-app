@@ -17,7 +17,7 @@ import com.nasikhunamin.storyapp.view.signup.SignUpViewModel
 @Suppress("CAST_NEVER_SUCCEEDS")
 class ViewModelFactory(
     private val userRepository: UserRepository,
-    private val storyRepository: StoryRepository
+    private val storyRepository: StoryRepository,
 ) : ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")

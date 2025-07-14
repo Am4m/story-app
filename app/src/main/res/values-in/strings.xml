@@ -37,4 +37,5 @@
     <string name="message_pcked">Silakan tandai lokasi di peta terlebih dahulu</string>
     <string name="add_location_selected">Lokasi di pilih</string>
     <string name="add_location">Tambah Lokasi</string>
+    <string name="retry">Ulangi</string>
 </resources>
