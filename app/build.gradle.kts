@@ -72,4 +72,11 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.room.paging)
 
+    androidTestImplementation(libs.androidx.arch.core.core.testing)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.androidx.arch.core.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
 }
