@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
 
 android {
@@ -14,7 +16,6 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", "\"BASE_API_URL\"")
     }
 
     buildTypes {
@@ -26,16 +27,20 @@ android {
             )
         }
     }
+    buildFeatures {
+        viewBinding = true
+        buildConfig = true
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
-    buildFeatures {
-        viewBinding = true
-        buildConfig = true
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -46,6 +51,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.play.services.maps)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,5 +67,26 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    implementation(libs.espresso.idling.resource)
+
+    implementation(libs.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.room.paging)
+
+    androidTestImplementation(libs.androidx.arch.core.core.testing)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.espresso.intents)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+    androidTestImplementation(libs.uiautomator.v18)
+
+    testImplementation(libs.androidx.arch.core.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+
 
 }

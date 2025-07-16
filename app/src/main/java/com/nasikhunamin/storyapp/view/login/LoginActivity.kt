@@ -130,9 +130,9 @@ class LoginActivity : AppCompatActivity() {
             playSequentially(
                 ObjectAnimator.ofFloat(binding.textView, View.ALPHA, 1f).setDuration(100),
                 ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100),
-                ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 1f).setDuration(100),
+                ObjectAnimator.ofFloat(binding.emailTextViewLogin, View.ALPHA, 1f).setDuration(100),
                 ObjectAnimator.ofFloat(binding.edLoginEmail, View.ALPHA, 1f).setDuration(100),
-                ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 1f).setDuration(100),
+                ObjectAnimator.ofFloat(binding.passwordTextViewLogin, View.ALPHA, 1f).setDuration(100),
                 ObjectAnimator.ofFloat(binding.edLoginPassword, View.ALPHA, 1f).setDuration(100),
                 ObjectAnimator.ofFloat(binding.loginButton, View.ALPHA, 1f).setDuration(100)
             )

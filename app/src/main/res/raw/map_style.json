@@ -1,0 +1,47 @@
+[
+  {
+    "featureType": "administrative.country",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "saturation": 100
+      },
+      {
+        "lightness": -50
+      },
+      {
+        "visibility": "on"
+      },
+      {
+        "weight": 1.5
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#e83030"
+      },
+      {
+        "saturation": 100
+      },
+      {
+        "lightness": 55
+      },
+      {
+        "weight": 2.5
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "weight": 6
+      }
+    ]
+  }
+]

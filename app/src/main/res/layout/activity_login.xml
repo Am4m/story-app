@@ -39,7 +39,7 @@
         app:layout_constraintVertical_bias="0.078" />
 
     <TextView
-        android:id="@+id/emailTextView"
+        android:id="@+id/emailTextViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -62,10 +62,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/emailTextViewLogin" />
 
     <TextView
-        android:id="@+id/passwordTextView"
+        android:id="@+id/passwordTextViewLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
@@ -89,14 +89,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTextViewLogin" />
 
     <Button
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:alpha="0"
         android:backgroundTint="@color/navy"

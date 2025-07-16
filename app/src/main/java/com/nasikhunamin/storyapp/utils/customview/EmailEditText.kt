@@ -12,10 +12,6 @@ import androidx.core.content.ContextCompat
 import com.nasikhunamin.storyapp.R
 
 class EmailEditText : AppCompatEditText {
-    private lateinit var bgEditText: Drawable
-    private lateinit var icEmail: Drawable
-    private var hintText: String = ""
-
     constructor(context: Context) : super(context) {
         init()
     }
@@ -26,16 +22,17 @@ class EmailEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        background = bgEditText
-        setButtonDrawables(startOfTheText = icEmail)
-        compoundDrawablePadding = 40
-        hint = hintText
     }
 
     private fun init() {
-        bgEditText = ContextCompat.getDrawable(context, R.drawable.bg_edit_text) as Drawable
-        icEmail = ContextCompat.getDrawable(context, R.drawable.ic_baseline_email_24) as Drawable
-        hintText = context.getString(R.string.email)
+        // Pindahkan semua setup ke sini
+        val bgEditText = ContextCompat.getDrawable(context, R.drawable.bg_edit_text) as Drawable
+        val icEmail = ContextCompat.getDrawable(context, R.drawable.ic_baseline_email_24) as Drawable
+
+        background = bgEditText
+        setButtonDrawables(startOfTheText = icEmail)
+        compoundDrawablePadding = 40
+        hint = context.getString(R.string.email)
         inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
 
         addTextChangedListener(object : TextWatcher {
@@ -48,7 +45,6 @@ class EmailEditText : AppCompatEditText {
             override fun afterTextChanged(s: Editable?) {}
         })
     }
-
 
     private fun setButtonDrawables(
         startOfTheText: Drawable? = null,
@@ -64,5 +60,7 @@ class EmailEditText : AppCompatEditText {
         )
     }
 
-    private fun isValidEmail(email: CharSequence) = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    private fun isValidEmail(email: CharSequence): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 }
