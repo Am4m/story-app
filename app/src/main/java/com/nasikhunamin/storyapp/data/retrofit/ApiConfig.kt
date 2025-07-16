@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
-
+    var base_url = "YOUR_API_KEY"
     fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG)

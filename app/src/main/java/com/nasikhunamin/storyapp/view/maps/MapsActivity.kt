@@ -1,6 +1,5 @@
 package com.nasikhunamin.storyapp.view.maps
 
-import android.content.Intent
 import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,8 +23,6 @@ import com.nasikhunamin.storyapp.data.repository.Result
 import com.nasikhunamin.storyapp.data.response.ListStoryItem
 import com.nasikhunamin.storyapp.data.retrofit.ApiConfig
 import com.nasikhunamin.storyapp.databinding.ActivityMapsBinding
-import com.nasikhunamin.storyapp.view.addstory.maps.MapsPickedLocationActivity.Companion.EXTRA_LATITUDE
-import com.nasikhunamin.storyapp.view.addstory.maps.MapsPickedLocationActivity.Companion.EXTRA_LONGITUDE
 import kotlin.getValue
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {

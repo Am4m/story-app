@@ -110,7 +110,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/button_language_localization"
         android:src="@drawable/ic_language_24"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewWelcome"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.913"
         app:layout_constraintStart_toStartOf="parent"
