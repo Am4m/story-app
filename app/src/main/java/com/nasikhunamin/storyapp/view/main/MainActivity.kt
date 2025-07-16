@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        viewModel.story.observe(this) { pagingData ->
+        viewModel.story.observe(this) { pagingData->
             mainAdapter.submitData(lifecycle, pagingData)
         }
     }

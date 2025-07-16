@@ -1,7 +1,12 @@
 package com.nasikhunamin.storyapp.view.maps
 
+import android.content.Intent
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -12,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.nasikhunamin.storyapp.R
 import com.nasikhunamin.storyapp.ViewModelFactory
@@ -19,6 +25,8 @@ import com.nasikhunamin.storyapp.data.repository.Result
 import com.nasikhunamin.storyapp.data.response.ListStoryItem
 import com.nasikhunamin.storyapp.data.retrofit.ApiConfig
 import com.nasikhunamin.storyapp.databinding.ActivityMapsBinding
+import com.nasikhunamin.storyapp.view.addstory.maps.MapsPickedLocationActivity.Companion.EXTRA_LATITUDE
+import com.nasikhunamin.storyapp.view.addstory.maps.MapsPickedLocationActivity.Companion.EXTRA_LONGITUDE
 import kotlin.getValue
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -28,6 +36,35 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val viewModel by viewModels<MapsViewModel> {
         ViewModelFactory.getInstance(this, ApiConfig.getApiService())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.maps_options, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.normal_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
+                true
+            }
+            R.id.satellite_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                true
+            }
+            R.id.terrain_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
+                true
+            }
+            R.id.hybrid_type -> {
+                mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +89,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         getMapsStory()
+        setMapStyle()
     }
 
 
@@ -108,7 +146,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
+        }
+    }
+
+
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    companion object {
+        private const val TAG = "MapsActivity"
     }
 }

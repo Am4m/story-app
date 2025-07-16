@@ -38,4 +38,8 @@
     <string name="add_location">Add Location</string>
     <string name="retry">retry</string>
     <string name="maps_permission">While using the app</string>
+    <string name="normal_type">Normal</string>
+    <string name="satellite_type">Satellite</string>
+    <string name="terrain_type">Terrain</string>
+    <string name="hybrid_type">Hybrid</string>
 </resources>

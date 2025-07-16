@@ -2,19 +2,21 @@ package com.nasikhunamin.storyapp.view.addstory.maps
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.nasikhunamin.storyapp.R
@@ -59,7 +61,6 @@ class MapsPickedLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         return super.onOptionsItemSelected(item)
     }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapClickListener { latLang ->
@@ -72,6 +73,7 @@ class MapsPickedLocationActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newLatLng(latLang))
         }
         getMyLocation()
+        setMapStyle()
     }
 
     private val requestPermissionLauncher =
@@ -95,7 +97,20 @@ class MapsPickedLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    private fun setMapStyle() {
+        try {
+            val success =
+                mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (exception: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", exception)
+        }
+    }
+
     companion object{
+        private const val TAG = "MapsPickedActivity"
         const val EXTRA_LATITUDE = "extra_latitude"
         const val EXTRA_LONGITUDE = "extra_longitude"
     }
