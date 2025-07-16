@@ -40,6 +40,9 @@ android {
         jvmTarget = "11"
         freeCompilerArgs += listOf("-Xopt-in=kotlin.RequiresOptIn")
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 dependencies {
@@ -66,6 +69,8 @@ dependencies {
     implementation(libs.logging.interceptor)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    implementation(libs.espresso.idling.resource)
+
     implementation(libs.room.ktx)
     ksp(libs.androidx.room.compiler)
 
@@ -74,6 +79,10 @@ dependencies {
 
     androidTestImplementation(libs.androidx.arch.core.core.testing)
     androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.espresso.intents)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.okhttp3.okhttp.tls)
+    androidTestImplementation(libs.uiautomator.v18)
 
     testImplementation(libs.androidx.arch.core.core.testing)
     testImplementation(libs.kotlinx.coroutines.test)

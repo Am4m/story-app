@@ -16,6 +16,7 @@ import com.nasikhunamin.storyapp.data.pref.UserPreference
 import com.nasikhunamin.storyapp.data.response.ErrorResponse
 import com.nasikhunamin.storyapp.data.response.ListStoryItem
 import com.nasikhunamin.storyapp.data.retrofit.ApiService
+import com.nasikhunamin.storyapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.first
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -87,19 +88,21 @@ class StoryRepository private constructor(
             imageFile.name,
             requestImageFile
         )
-        try {
-            val successResponse = apiService.uploadImage(
-                "Bearer $token",
-                multipartBody,
-                requestBody,
-                lat,
-                lon
-            )
-            emit(Result.Success(successResponse))
-        } catch (e: HttpException) {
-            val errorBody = e.response()?.errorBody()?.string()
-            val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
-            emit(Result.Error(errorResponse.message.toString()))
+        wrapEspressoIdlingResource {
+            try {
+                val successResponse = apiService.uploadImage(
+                    "Bearer $token",
+                    multipartBody,
+                    requestBody,
+                    lat,
+                    lon
+                )
+                emit(Result.Success(successResponse))
+            } catch (e: HttpException) {
+                val errorBody = e.response()?.errorBody()?.string()
+                val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+                emit(Result.Error(errorResponse.message.toString()))
+            }
         }
     }
 

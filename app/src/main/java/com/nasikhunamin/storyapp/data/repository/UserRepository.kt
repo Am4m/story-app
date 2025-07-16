@@ -9,6 +9,7 @@ import com.nasikhunamin.storyapp.data.pref.UserPreference
 import com.nasikhunamin.storyapp.data.response.ErrorResponse
 import com.nasikhunamin.storyapp.data.response.LoginResponse
 import com.nasikhunamin.storyapp.data.retrofit.ApiService
+import com.nasikhunamin.storyapp.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
 import retrofit2.HttpException
 
@@ -32,21 +33,23 @@ class UserRepository private constructor(
 
     fun login(email: String, password: String) : LiveData<Result<LoginResponse>> = liveData {
         emit(Result.Loading)
-        try {
-           val response = apiService.login(email, password)
-            userPreference.saveSession(
-                UserModel(
-                    email = email,
-                    token = response.loginResult?.token.toString(),
-                    isLogin = true
+        wrapEspressoIdlingResource {
+            try {
+                val response = apiService.login(email, password)
+                userPreference.saveSession(
+                    UserModel(
+                        email = email,
+                        token = response.loginResult?.token.toString(),
+                        isLogin = true
+                    )
                 )
-            )
-            emit(Result.Success(response))
-        }catch (e: HttpException){
-            val jsonInString = e.response()?.errorBody()?.string()
-            val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            Log.e(USER_REPOSITORY, "$LOGIN_FAILED ${errorBody.message}")
-            emit(Result.Error(errorBody.message.toString()))
+                emit(Result.Success(response))
+            }catch (e: HttpException){
+                val jsonInString = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
+                Log.e(USER_REPOSITORY, "$LOGIN_FAILED ${errorBody.message}")
+                emit(Result.Error(errorBody.message.toString()))
+            }
         }
     }
 

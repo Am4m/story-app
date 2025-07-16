@@ -12,10 +12,6 @@ import androidx.core.content.ContextCompat
 import com.nasikhunamin.storyapp.R
 
 class PasswordEditText : AppCompatEditText {
-    private lateinit var bgEditText: Drawable
-    private lateinit var icPassword: Drawable
-    private var hintText: String = ""
-
     constructor(context: Context) : super(context) {
         init()
     }
@@ -26,16 +22,16 @@ class PasswordEditText : AppCompatEditText {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        background = bgEditText
-        setButtonDrawables(startOfTheText = icPassword)
-        compoundDrawablePadding = 40
-        hint = hintText
     }
 
     private fun init() {
-        bgEditText = ContextCompat.getDrawable(context, R.drawable.bg_edit_text) as Drawable
-        icPassword = ContextCompat.getDrawable(context, R.drawable.ic_baseline_lock_24) as Drawable
-        hintText = context.getString(R.string.password)
+        val bgEditText = ContextCompat.getDrawable(context, R.drawable.bg_edit_text) as Drawable
+        val icPassword = ContextCompat.getDrawable(context, R.drawable.ic_baseline_lock_24) as Drawable
+
+        background = bgEditText
+        setButtonDrawables(startOfTheText = icPassword)
+        compoundDrawablePadding = 40
+        hint = context.getString(R.string.password)
         inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         addTextChangedListener(object : TextWatcher {
