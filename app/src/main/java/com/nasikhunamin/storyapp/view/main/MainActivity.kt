@@ -14,6 +14,7 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.nasikhunamin.storyapp.R
 import com.nasikhunamin.storyapp.ViewModelFactory
 import com.nasikhunamin.storyapp.data.retrofit.ApiConfig
@@ -35,7 +36,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = getString(R.string.list_story)
+        
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
@@ -44,13 +47,40 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.fab.setOnClickListener {
+        binding.fabAddStory.setOnClickListener {
             startActivity(Intent(this@MainActivity, AddStoryActivity::class.java))
         }
 
-        mainAdapter = MainAdapter()
         setUpRecyclerView()
         setupView()
+    }
+
+    private fun setupView() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+    }
+
+    private fun setUpRecyclerView() {
+        binding.rvStories.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        mainAdapter = MainAdapter()
+        binding.rvStoryFeed.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.rvStoryFeed.adapter = mainAdapter.withLoadStateFooter(
+            footer = LoadingStateAdapter {
+                mainAdapter.retry()
+            }
+        )
+
+        viewModel.story.observe(this) { pagingData ->
+            mainAdapter.submitData(lifecycle, pagingData)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,58 +99,25 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.action_logout -> {
-                val appWidgetManager = AppWidgetManager.getInstance(this)
-                val componentName = ComponentName(this, StoryAppWidget::class.java)
-                val ids = appWidgetManager.getAppWidgetIds(componentName)
-                Log.d(LOGIN_LOG, "$MESSAGE_LOG_LOGIN ${ids.joinToString()}")
-                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.stack_view)
-                val updateIntent = Intent(this, StoryAppWidget::class.java)
-                updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-                sendBroadcast(updateIntent)
-                viewModel.logout()
-                Log.d(MAIN_LOG, MAIN_MESSAGE)
-                val intent = Intent(this, WelcomeActivity::class.java)
-                startActivity(intent)
-                finish()
+                logout()
                 true
-
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+    private fun logout() {
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val componentName = ComponentName(this, StoryAppWidget::class.java)
+        val ids = appWidgetManager.getAppWidgetIds(componentName)
+        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.stack_view)
+        val updateIntent = Intent(this, StoryAppWidget::class.java).apply {
+            action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         }
+        sendBroadcast(updateIntent)
+        viewModel.logout()
+        startActivity(Intent(this, WelcomeActivity::class.java))
+        finish()
     }
-
-    private fun setUpRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = mainAdapter.withLoadStateFooter(
-            footer = LoadingStateAdapter {
-                mainAdapter.retry()
-            }
-        )
-
-        viewModel.story.observe(this) { pagingData->
-            mainAdapter.submitData(lifecycle, pagingData)
-        }
-    }
-
-    companion object{
-        const val LOGIN_LOG = "LoginActivity"
-        const val MAIN_LOG = "MainActivity"
-        const val MESSAGE_LOG_LOGIN = "Widget IDs:"
-        const val MAIN_MESSAGE = "LogOut"
-    }
-
 }
-

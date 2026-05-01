@@ -24,7 +24,11 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.title = getString(R.string.detail_story)
+        
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val storyId = intent.getStringExtra(STORY_ID)
         if (storyId.isNullOrEmpty()) {
@@ -58,9 +62,11 @@ class DetailActivity : AppCompatActivity() {
     private fun showStoryDetail(story: ListStoryItem) {
         binding.tvItemName.text = story.name
         binding.tvItemDescription.text = story.description
+        binding.toolbarLayout.title = story.name
 
         Glide.with(this)
             .load(story.photoUrl)
+            .placeholder(R.drawable.ic_place_holder)
             .into(binding.ivHeroPhoto)
     }
 
@@ -70,4 +76,3 @@ class DetailActivity : AppCompatActivity() {
         const val MESSAGE_FAILED_LOAD = "Gagal memuat:"
     }
 }
-

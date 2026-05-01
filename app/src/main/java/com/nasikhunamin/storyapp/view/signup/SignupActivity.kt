@@ -36,6 +36,7 @@ class SignupActivity : AppCompatActivity() {
 
         setupView()
         setupAction()
+        observeViewModel()
         playAnimation()
     }
 
@@ -57,7 +58,18 @@ class SignupActivity : AppCompatActivity() {
             val name = binding.edRegisterName.text.toString().trim()
             val email = binding.edRegisterEmail.text.toString().trim()
             val password = binding.edRegisterPassword.text.toString().trim()
-            viewModel.register(name, email, password).observe(this) { result ->
+            
+            if (name.isNotEmpty() && email.isNotEmpty() && password.length >= 8) {
+                viewModel.register(name, email, password)
+            } else {
+                Toast.makeText(this, "Pastikan semua field terisi dengan benar", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.signupResult.observe(this) { result ->
+            if (result != null) {
                 when(result) {
                     is Result.Loading -> {
                         showLoading(true)
