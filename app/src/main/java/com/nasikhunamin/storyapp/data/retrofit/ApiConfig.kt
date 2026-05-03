@@ -7,6 +7,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiConfig {
+
+    var base_url = "http://127.0.0.1:8080/"
     fun getApiService(): ApiService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG)
@@ -19,6 +21,7 @@ object ApiConfig {
             .build()
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(base_url)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
