@@ -1,6 +1,7 @@
 package com.nasikhunamin.storyapp.data.retrofit
 
 import com.nasikhunamin.storyapp.BuildConfig
+import com.nasikhunamin.storyapp.utils.EspressoIdlingResource
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,6 +19,15 @@ object ApiConfig {
         )
         val client = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor { chain ->
+                EspressoIdlingResource.increment()
+                val request = chain.request()
+                try {
+                    chain.proceed(request)
+                } finally {
+                    EspressoIdlingResource.decrement()
+                }
+            }
             .build()
         val retrofit = Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)

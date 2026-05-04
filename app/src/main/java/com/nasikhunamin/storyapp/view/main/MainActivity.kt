@@ -117,7 +117,5 @@ class MainActivity : AppCompatActivity() {
         }
         sendBroadcast(updateIntent)
         viewModel.logout()
-        startActivity(Intent(this, WelcomeActivity::class.java))
-        finish()
     }
 }
